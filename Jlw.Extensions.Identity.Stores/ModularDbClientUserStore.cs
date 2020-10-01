@@ -148,8 +148,8 @@ namespace Jlw.Extensions.Identity.Stores
                     break;
             }
 
-            if (!string.IsNullOrWhiteSpace(user.Id.ToString()) || DataUtility.ParseLong(result) <= 0)
-                errors.Add(new IdentityError() { Description = $"Unable to retrieve a valid user Id." });
+            if (string.IsNullOrWhiteSpace(user?.Id.ToString()) || DataUtility.ParseLong(result) <= 0)
+                errors.Add(new IdentityError() {Description = $"Unable to retrieve a valid user Id."});
 
 
             if (errors.Any())
@@ -510,7 +510,6 @@ namespace Jlw.Extensions.Identity.Stores
         /// <inheritdoc />
         public override Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            throw new NotImplementedException();
             /*
             ThrowIfNullDisposedCancelled(user, cancellationToken);
             var aList = user.Claims.ToList();
@@ -543,6 +542,7 @@ namespace Jlw.Extensions.Identity.Stores
             return base.GetClaimsAsync(user, cancellationToken);
             //return Task.FromResult(user.Claims.ToList());
             */
+            return base.GetClaimsAsync(user, cancellationToken);
         }
 
 
