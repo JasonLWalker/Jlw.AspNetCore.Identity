@@ -46,8 +46,8 @@ jobs:
       with:
         name: ${{ env.PKGNAME }}
         path: |
-          ${{ env.PKGNAME }}/**/bin/Release
-          ${{ env.PKGNAME }}/**/obj/Release
+          **/bin/Release
+          **/obj/Release
 
   test:
     needs: build
@@ -70,7 +70,7 @@ jobs:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
     - uses: actions/download-artifact@v2
       with:
         name: ${{ env.PKGNAME }}
