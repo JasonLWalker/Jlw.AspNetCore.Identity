@@ -2,9 +2,22 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;</TargetFrameworks>
+    <Deterministic>False</Deterministic>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);ReadPackageVersionFromOutputAssembly</GenerateNuspecDependsOn>
+    <RepositoryUrl>https://github.com/JasonLWalker/Jlw.Extensions.Identity.Stores.git</RepositoryUrl>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+    <AssemblyName>Jlw.Extensions.Identity.Stores</AssemblyName>
+    <RootNamespace>Jlw.Extensions.Identity.Stores</RootNamespace>
+
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+
+    <PackageId>Jlw.Extensions.Identity.Stores</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageReleaseNotes>Provided as is</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,5 +27,14 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
+
+  <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build">
+    <GetAssemblyIdentity AssemblyFiles="$(OutputPath)\netstandard2.0\$(AssemblyName).dll">
+      <Output TaskParameter="Assemblies" ItemName="PackAssembly" />
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <PackageVersion>%(PackAssembly.Version)$(VersionSuffix)</PackageVersion>
+    </PropertyGroup>
+  </Target>
 
 </Project>

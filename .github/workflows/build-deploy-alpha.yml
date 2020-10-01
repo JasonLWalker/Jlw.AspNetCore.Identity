@@ -36,6 +36,7 @@ jobs:
     #  run: |
     #    dotnet --list-sdks
     #    dotnet --list-runtimes
+
     - name: Install dependencies
       run: dotnet restore
     - name: Build with dotnet
