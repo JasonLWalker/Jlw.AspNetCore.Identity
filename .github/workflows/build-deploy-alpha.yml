@@ -27,7 +27,7 @@ jobs:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-nuget-
+          ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
     #- name: Setup .NET Core 2.1
     #  uses: actions/setup-dotnet@v1
     #  with:
@@ -46,8 +46,8 @@ jobs:
       with:
         name: ${{ env.PKGNAME }}
         path: |
-          ${{ env.PKGNAME }}**/bin/Release
-          ${{ env.PKGNAME }}**/obj/Release
+          ${{ env.PKGNAME }}/**/bin/Release
+          ${{ env.PKGNAME }}/**/obj/Release
 
   test:
     needs: build
