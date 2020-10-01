@@ -5,7 +5,7 @@
     <Deterministic>False</Deterministic>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);ReadPackageVersionFromOutputAssembly</GenerateNuspecDependsOn>
-    <RepositoryUrl>https://github.com/JasonLWalker/Jlw.Extensions.Identity.Stores.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/JasonLWalker/Jlw.AspNetCore.Identity.git</RepositoryUrl>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <AssemblyName>Jlw.Extensions.Identity.Stores</AssemblyName>
     <RootNamespace>Jlw.Extensions.Identity.Stores</RootNamespace>
