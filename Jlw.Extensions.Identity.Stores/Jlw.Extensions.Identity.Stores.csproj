@@ -9,7 +9,7 @@
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <AssemblyName>Jlw.Extensions.Identity.Stores</AssemblyName>
     <RootNamespace>Jlw.Extensions.Identity.Stores</RootNamespace>
-
+    <IsPackable>true</IsPackable>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
