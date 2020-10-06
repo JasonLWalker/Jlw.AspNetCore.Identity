@@ -76,7 +76,7 @@ namespace Jlw.Extensions.Identity.Stores
 
 
 
-            return _dbClient.GetRecordObject<TUser, TUser, TReturn>(objSearch, ConnectionString, def);
+            return _dbClient.GetRecordObject<TReturn>(objSearch, ConnectionString, def);
 
         }
 
@@ -92,7 +92,7 @@ namespace Jlw.Extensions.Identity.Stores
 
 
 
-            return _dbClient.GetRecordScalar<TUser, TUser, TReturn>(objSearch, ConnectionString, def);
+            return _dbClient.GetRecordScalar<TReturn>(objSearch, ConnectionString, def);
 
         }
         #endregion
