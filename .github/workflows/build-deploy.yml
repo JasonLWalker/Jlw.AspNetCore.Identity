@@ -165,7 +165,7 @@ jobs:
     - name: Config Environment Variables
       run: |
         export PKG_NAME="$(pwd | sed 's/.*\/\([^\/]*\)$/\1/')"
-        echo "::set-env name=PKGNAME::$PKG_NAME"        
+        echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
     - name: Delete Artifacts
       uses: geekyeggo/delete-artifact@v1
       with:
