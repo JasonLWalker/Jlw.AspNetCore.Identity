@@ -96,7 +96,7 @@ jobs:
       run: |
         export PKG_NAME="Jlw.Extensions.Identity.Stores"
         echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
-        export PKG_VERSION="$(echo `ls ./${{ env.PKGNAME }}/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
+        export PKG_VERSION="$(echo `ls ./$PKG_NAME/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
         echo "::set-env name=PKGVERSION::$PKG_VERSION"
     - name: Publish to github (using curl)
       run: |
@@ -149,7 +149,7 @@ jobs:
       run: |
         export PKG_NAME="Jlw.Extensions.Identity.Mock"
         echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
-        export PKG_VERSION="$(echo `ls ./${{ env.PKGNAME }}/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
+        export PKG_VERSION="$(echo `ls ./$PKG_NAME/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
         echo "::set-env name=PKGVERSION::$PKG_VERSION"
     - name: Publish to github (using curl)
       run: |
