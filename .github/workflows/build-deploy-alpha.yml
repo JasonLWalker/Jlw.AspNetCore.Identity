@@ -2,8 +2,9 @@ name: Build and Deploy (Alpha)
 
 on:
   push:
-    branches: 
-      - 'primary'
+    branches: #all branches that are NOT main.
+      - '*'
+      - '!primary'
 
 
 jobs:
