@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Jlw.AspNetCore.Identity")]
-[assembly: AssemblyDescription("A Data utility class")]
+[assembly: AssemblyTitle("Jlw.Extensions.Identity.Mock")]
+[assembly: AssemblyDescription("A class to allow for quick Identity UI Mocking")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jason L. Walker")]
-[assembly: AssemblyProduct("Jlw.AspNetCore.Identity")]
+[assembly: AssemblyProduct("Jlw.Extensions.Identity.Mock")]
 [assembly: AssemblyCopyright("Copyright ©2012-2021 Jason L. Walker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
