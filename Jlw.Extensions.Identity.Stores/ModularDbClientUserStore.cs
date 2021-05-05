@@ -392,7 +392,7 @@ namespace Jlw.Extensions.Identity.Stores
                 IDbCommand cmd = _dbClient.GetCommand("sp_AuthIsUserInRole", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 var normalizedRoleName = roleName.ToUpper();
-                _dbClient.AddParameterWithValue("@id", DataUtility.ParseInt(user.Id), cmd);
+                _dbClient.AddParameterWithValue("@id", DataUtility.Parse<TKey>(user.Id), cmd);
                 _dbClient.AddParameterWithValue("@normalizedRoleName", normalizedRoleName, cmd);
                 
                 conn.Open();
@@ -422,7 +422,7 @@ namespace Jlw.Extensions.Identity.Stores
             {
                 var cmd = _dbClient.GetCommand("sp_AuthGetRolesForUser", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                _dbClient.AddParameterWithValue("@id", DataUtility.ParseInt(user.Id), cmd);
+                _dbClient.AddParameterWithValue("@id", DataUtility.Parse<TKey>(user.Id), cmd);
                 
                 conn.Open();
                 using (var rdr = cmd.ExecuteReader())
@@ -510,7 +510,7 @@ namespace Jlw.Extensions.Identity.Stores
         /// <inheritdoc />
         public override Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken = new CancellationToken())
         {
-            /*
+            
             ThrowIfNullDisposedCancelled(user, cancellationToken);
             var aList = user.Claims.ToList();
             user.Claims.Clear();
@@ -523,7 +523,7 @@ namespace Jlw.Extensions.Identity.Stores
             {
                 var cmd = _dbClient.GetCommand("sp_AuthGetClaimsForUser", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                _dbClient.AddParameterWithValue("@id", DataUtility.ParseInt(user.Id), cmd);
+                _dbClient.AddParameterWithValue("@id", DataUtility.Parse<TKey>(user.Id), cmd);
                 
                 conn.Open();
                 using (var rdr = cmd.ExecuteReader())
@@ -541,8 +541,8 @@ namespace Jlw.Extensions.Identity.Stores
 
             return base.GetClaimsAsync(user, cancellationToken);
             //return Task.FromResult(user.Claims.ToList());
-            */
-            return base.GetClaimsAsync(user, cancellationToken);
+            
+            //return base.GetClaimsAsync(user, cancellationToken);
         }
 
 
