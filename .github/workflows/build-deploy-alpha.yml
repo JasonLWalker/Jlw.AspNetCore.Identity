@@ -12,22 +12,19 @@ jobs:
     steps:
     - name: Config Environment Variables
       run: |
-        $PKG_NAME=(Get-Item -Path ".\").Name
         $CURRENT_DIR=(Get-Item -Path ".\").FullName
-        echo "::set-env name=DOTNET_NOLOGO::1"
-        echo "::set-env name=DOTNET_CLI_TELEMETRY_OPTOUT::1"
-        echo "::set-env name=DOTNET_MULTILEVEL_LOOKUP::1"
-        echo "::set-env name=PKGNAME::$PKG_NAME"
-        echo "::set-env name=CURRENTDIR::$CURRENT_DIR"
+        $PKG_NAME=(Get-Item -Path ".\").Name
+        "PKGNAME=$PKG_NAME" | Add-Content -Path $ENV:GITHUB_ENV
+        "CURRENTDIR=$CURRENT_DIR" | Add-Content -Path $ENV:GITHUB_ENV
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Restore Nuget package cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+    #- name: Restore Nuget package cache
+    #  uses: actions/cache@v2
+    #  with:
+    #    path: ~/.nuget/packages
+    #    key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+    #    restore-keys: |
+    #      ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
     #- name: Setup .NET Core 2.1
     #  uses: actions/setup-dotnet@v1
     #  with:
@@ -56,22 +53,19 @@ jobs:
     steps:
     - name: Config Environment Variables
       run: |
-        $PKG_NAME=(Get-Item -Path ".\").Name
         $CURRENT_DIR=(Get-Item -Path ".\").FullName
-        echo "::set-env name=DOTNET_NOLOGO::1"
-        echo "::set-env name=DOTNET_CLI_TELEMETRY_OPTOUT::1"
-        echo "::set-env name=DOTNET_MULTILEVEL_LOOKUP::1"
-        echo "::set-env name=PKGNAME::$PKG_NAME"
-        echo "::set-env name=CURRENTDIR::$CURRENT_DIR"
+        $PKG_NAME=(Get-Item -Path ".\").Name
+        "PKGNAME=$PKG_NAME" | Add-Content -Path $ENV:GITHUB_ENV
+        "CURRENTDIR=$CURRENT_DIR" | Add-Content -Path $ENV:GITHUB_ENV
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Restore Nuget package cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+    #- name: Restore Nuget package cache
+    #  uses: actions/cache@v2
+    #  with:
+    #    path: ~/.nuget/packages
+    #    key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+    #    restore-keys: |
+    #      ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
     - uses: actions/download-artifact@v2
       with:
         name: ${{ env.PKGNAME }}
@@ -83,14 +77,16 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    env: 
+      DOTNET_NOLOGO: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_MULTILEVEL_LOOKUP: 1
+      
     steps:
     - name: Config Environment Variables
       run: |
         export PKG_NAME="$(pwd | sed 's/.*\/\([^\/]*\)$/\1/')"
-        echo "::set-env name=PKGNAME::$PKG_NAME"        
-        echo "::set-env name=DOTNET_NOLOGO::1"
-        echo "::set-env name=DOTNET_CLI_TELEMETRY_OPTOUT::1"
-        echo "::set-env name=DOTNET_MULTILEVEL_LOOKUP::1"
+        echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
     - uses: actions/download-artifact@v2
       with:
         name: ${{ env.PKGNAME }}
