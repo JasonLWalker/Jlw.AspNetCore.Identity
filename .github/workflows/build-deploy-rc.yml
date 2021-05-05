@@ -1,8 +1,7 @@
 name: Build and Deploy (Release Candidate)
 
 on:
-  pull_request:
-    branches: [ primary ]
+  workflow_dispatch:
 
 jobs:
   build:
