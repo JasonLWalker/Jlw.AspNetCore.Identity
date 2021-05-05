@@ -46,8 +46,10 @@ namespace Jlw.Extensions.Identity.Stores
         protected virtual void InitializeDefinitions()
         {
             AddDefinition("FindByNameAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthFindUserByName", CommandType.StoredProcedure, new[] { "normalizedUserName" }, null, typeof(TUser)));
+            AddDefinition("FindByEmailAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthFindUserByNormalizedEmail", CommandType.StoredProcedure, new[] { "normalizedEmail" }, null, typeof(TUser)));
+            AddDefinition("CreateAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthCreateUser", CommandType.StoredProcedure, new[] {"userName", "normalizedUserName", "email", "normalizedEmail", "emailConfirmed", "passwordHash", "phoneNumber", "phoneNumberConfirmed", "accessFailedCount", "lockoutEnabled", "lockoutEnd", "twoFactorEnabled"}, null, typeof(string)));
         }
-        
+
         public static string GetCaller([CallerMemberName] string caller = null)
         {
             return caller;
@@ -74,7 +76,7 @@ namespace Jlw.Extensions.Identity.Stores
 
 
 
-            return _dbClient.GetRecordObject<TUser, TUser, TReturn>(objSearch, ConnectionString, def);
+            return _dbClient.GetRecordObject<TReturn>(objSearch, ConnectionString, def);
 
         }
 
@@ -90,7 +92,7 @@ namespace Jlw.Extensions.Identity.Stores
 
 
 
-            return _dbClient.GetRecordScalar<TUser, TUser, TReturn>(objSearch, ConnectionString, def);
+            return _dbClient.GetRecordScalar<TReturn>(objSearch, ConnectionString, def);
 
         }
         #endregion
@@ -107,57 +109,53 @@ namespace Jlw.Extensions.Identity.Stores
         public override Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            var errors = new List<IdentityError>();
 
             if (user == null)
-                throw new ArgumentException($"Invalid argument. User cannot be null.", nameof(user), null);
+            {
+                errors.Add(new IdentityError() {Description = $"Invalid Argument. User cannot be null."});
+            }
+
 
             // Check for valid data
-            if (!string.IsNullOrWhiteSpace(user.Id.ToString()) && user.Id.ToString() != "0")
-                throw new ArgumentException($"Invalid argument. Id must not be specified.", nameof(user.Id), null);
-            if (string.IsNullOrWhiteSpace(user.UserName))
-                throw new ArgumentException($"Invalid argument. UserName cannot be null or empty.", nameof(user.UserName), null);
-            if (string.IsNullOrWhiteSpace(user.NormalizedUserName))
-                throw new ArgumentException($"Invalid argument. Normalized UserName cannot be null or empty.", nameof(user.NormalizedUserName), null);
-
-            using (var conn = _dbClient.GetConnection(_connString))
+            if (!string.IsNullOrWhiteSpace(user?.Id.ToString()) && user.Id.ToString() != "0")
             {
-                IDbCommand cmd = _dbClient.GetCommand("sp_AuthCreateUser", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                _dbClient.AddParameterWithValue("@userName", user.UserName, cmd);
-                _dbClient.AddParameterWithValue("@normalizedUserName", user.NormalizedUserName, cmd);
-                _dbClient.AddParameterWithValue("@email", user.Email, cmd);
-                _dbClient.AddParameterWithValue("@normalizedEmail", user.NormalizedEmail, cmd);
-                _dbClient.AddParameterWithValue("@emailConfirmed", user.EmailConfirmed, cmd);
-                _dbClient.AddParameterWithValue("@passwordHash", user.PasswordHash, cmd);
-                _dbClient.AddParameterWithValue("@phoneNumber", user.PhoneNumber, cmd);
-                _dbClient.AddParameterWithValue("@phoneNumberConfirmed", user.PhoneNumberConfirmed, cmd);
-                _dbClient.AddParameterWithValue("@accessFailedCount", user.AccessFailedCount, cmd);
-                _dbClient.AddParameterWithValue("@lockoutEnabled", user.LockoutEnabled, cmd);
-                _dbClient.AddParameterWithValue("@lockoutEnd", user.LockoutEnd, cmd);
-                _dbClient.AddParameterWithValue("@twoFactorEnabled", user.TwoFactorEnabled, cmd);
-                
-                conn.Open();
-                string result = cmd.ExecuteScalar().ToString();
-                switch (result.ToLower())
-                {
-//                    case "success":
-//                        break;
-//                    case "duplicate id":
-//                        throw new ArgumentException($"Cannot add a duplicate record. Id is already in use.", nameof(user.Id), null);
-                    case "duplicate username":
-                        throw new ArgumentException($"Cannot add a duplicate record. UserName is already in use.", nameof(user.UserName), null);
-                    case "duplicate normalized username":
-                        throw new ArgumentException($"Cannot add a duplicate record. Normalized UserName is already in use.", nameof(user.NormalizedUserName), null);
-                }
-
-                if (string.IsNullOrWhiteSpace(user.Id.ToString()) && DataUtility.ParseInt(result) > 0)
-                {
-                    user.Id = DataUtility.Parse<TKey>(result);
-                }
-
-                conn.Close();
+                errors.Add(new IdentityError(){Description = $"Invalid argument. Id must not be specified." });
             }
+
+            if (string.IsNullOrWhiteSpace(user?.UserName))
+            {
+                errors.Add(new IdentityError() { Description = $"Invalid argument. UserName cannot be null or empty." });
+            }
+
+            if (string.IsNullOrWhiteSpace(user?.NormalizedUserName))
+            {
+                errors.Add(new IdentityError() { Description = $"Invalid argument. Normalized UserName cannot be null or empty." });
+            }
+
+            if (errors.Any())
+                return Task.FromResult(IdentityResult.Failed(errors.ToArray()));
+
+            string result = GetRecordScalar<string>(user, GetCaller());
+
+            switch (result.ToLower())
+            {
+                case "duplicate username":
+                    errors.Add(new IdentityError() { Description = $"Cannot add a duplicate record. UserName is already in use." });
+                    break;
+                case "duplicate normalized username":
+                    errors.Add(new IdentityError() { Description = $"Cannot add a duplicate record. Normalized UserName is already in use." });
+                    break;
+            }
+
+            if (string.IsNullOrWhiteSpace(user?.Id.ToString()) || DataUtility.ParseLong(result) <= 0)
+                errors.Add(new IdentityError() {Description = $"Unable to retrieve a valid user Id."});
+
+
+            if (errors.Any())
+                return Task.FromResult(IdentityResult.Failed(errors.ToArray()));
+
+            user.Id = DataUtility.Parse<TKey>(result);
 
             return Task.FromResult(IdentityResult.Success);
         }
@@ -301,28 +299,6 @@ namespace Jlw.Extensions.Identity.Stores
         public override Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            /*
-            TUser oResult = null;
-            using (var conn = _dbClient.GetConnection(_connString))
-            {
-                IDbCommand cmd = _dbClient.GetCommand("sp_AuthFindUserByName", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                _dbClient.AddParameterWithValue("@normalizedUserName", normalizedUserName, cmd);
-                
-                conn.Open();
-                using (var rdr = cmd.ExecuteReader())
-                {
-                    while (rdr.Read())
-                    {
-                        oResult = new TUser();
-                        oResult.CopyFrom(rdr);
-                    }
-                }
-
-            }
-
-            return Task.FromResult(oResult);
-            */
             return Task.FromResult(GetRecordObject<TUser>(new TUser(){ NormalizedUserName = normalizedUserName }, GetCaller()));
         }
 
@@ -416,7 +392,7 @@ namespace Jlw.Extensions.Identity.Stores
                 IDbCommand cmd = _dbClient.GetCommand("sp_AuthIsUserInRole", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 var normalizedRoleName = roleName.ToUpper();
-                _dbClient.AddParameterWithValue("@id", DataUtility.ParseInt(user.Id), cmd);
+                _dbClient.AddParameterWithValue("@id", DataUtility.Parse<TKey>(user.Id), cmd);
                 _dbClient.AddParameterWithValue("@normalizedRoleName", normalizedRoleName, cmd);
                 
                 conn.Open();
@@ -446,7 +422,7 @@ namespace Jlw.Extensions.Identity.Stores
             {
                 var cmd = _dbClient.GetCommand("sp_AuthGetRolesForUser", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                _dbClient.AddParameterWithValue("@id", DataUtility.ParseInt(user.Id), cmd);
+                _dbClient.AddParameterWithValue("@id", DataUtility.Parse<TKey>(user.Id), cmd);
                 
                 conn.Open();
                 using (var rdr = cmd.ExecuteReader())
@@ -534,6 +510,7 @@ namespace Jlw.Extensions.Identity.Stores
         /// <inheritdoc />
         public override Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken = new CancellationToken())
         {
+            
             ThrowIfNullDisposedCancelled(user, cancellationToken);
             var aList = user.Claims.ToList();
             user.Claims.Clear();
@@ -546,7 +523,7 @@ namespace Jlw.Extensions.Identity.Stores
             {
                 var cmd = _dbClient.GetCommand("sp_AuthGetClaimsForUser", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                _dbClient.AddParameterWithValue("@id", DataUtility.ParseInt(user.Id), cmd);
+                _dbClient.AddParameterWithValue("@id", DataUtility.Parse<TKey>(user.Id), cmd);
                 
                 conn.Open();
                 using (var rdr = cmd.ExecuteReader())
@@ -564,13 +541,14 @@ namespace Jlw.Extensions.Identity.Stores
 
             return base.GetClaimsAsync(user, cancellationToken);
             //return Task.FromResult(user.Claims.ToList());
-
+            
+            //return base.GetClaimsAsync(user, cancellationToken);
         }
 
 
         public override Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            return Task.FromResult(GetRecordObject<TUser>(null, GetCaller()));
+            return Task.FromResult(GetRecordObject<TUser>(new TUser(){NormalizedEmail = normalizedEmail}, GetCaller()));
         }
     }
 }

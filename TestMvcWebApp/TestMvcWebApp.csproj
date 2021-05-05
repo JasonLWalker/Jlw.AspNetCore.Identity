@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-TestMvcWebApp-48FC73E4-062C-4581-81C7-33155B23E9A9</UserSecretsId>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Jlw.Extensions.Identity.Mock\Jlw.Extensions.Identity.Mock.csproj" />
     <ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
   </ItemGroup>
 

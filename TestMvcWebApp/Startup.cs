@@ -8,8 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
+using Jlw.Extensions.Identity.Mock;
+
 using UserLong = Jlw.Extensions.Identity.Stores.ModularBaseUser<long>;
 
 namespace TestMvcWebApp
@@ -26,6 +26,8 @@ namespace TestMvcWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IPasswordHasher<UserLong>, PlainTextPasswordHasher<UserLong>>();
+
             var dbClient = new ModularDbClient<SqlConnection>();
             services.AddSingleton<IModularDbClient>(dbClient);
 
