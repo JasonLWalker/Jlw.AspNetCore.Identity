@@ -1,7 +1,10 @@
 name: Build and Deploy (Alpha)
 
 on:
-  workflow_dispatch:
+  push:
+    branches: #all branches that are NOT main.
+      - '*'
+      - '!primary'
 
 
 jobs:
