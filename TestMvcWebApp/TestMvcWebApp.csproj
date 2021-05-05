@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Jlw.Extensions.Identity.Mock\Jlw.Extensions.Identity.Mock.csproj" />
     <ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
   </ItemGroup>
 
