@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Jlw.Extensions.Identity.Stores">
-      <HintPath>..\Jlw.Extensions.Identity.Stores\bin\Debug\netstandard2.0\Jlw.Extensions.Identity.Stores.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
   </ItemGroup>
 
   <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build">
