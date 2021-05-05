@@ -16,22 +16,6 @@ jobs:
         "CURRENTDIR=$CURRENT_DIR" | Add-Content -Path $ENV:GITHUB_ENV
     - name: Checkout Repository
       uses: actions/checkout@v2
-    #- name: Restore Nuget package cache
-    #  uses: actions/cache@v2
-    #  with:
-    #    path: ~/.nuget/packages
-    #    key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-    #    restore-keys: |
-    #      ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-    #- name: Setup .NET Core 2.1
-    #  uses: actions/setup-dotnet@v1
-    #  with:
-    #    dotnet-version: 2.1.x
-    #- name: Show .NET Info
-    #  run: |
-    #    dotnet --list-sdks
-    #    dotnet --list-runtimes
-
     - name: Install dependencies
       run: dotnet restore
     - name: Build with dotnet
@@ -95,16 +79,16 @@ jobs:
         echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
         export PKG_VERSION="$(echo `ls ./${{ env.PKGNAME }}/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
         echo "::set-env name=PKGVERSION::$PKG_VERSION"
-    - name: Publish to github (using curl)
+    - name: Publish to github (using curl) (Jlw.Extensions.Identity.Stores)
       run: |
         for f in ./${{ env.PKGNAME }}/bin/Release/*.nupkg
         do
           curl -vX PUT -u "${{ secrets.NUGET_USER }}:${{ secrets.GITHUB_TOKEN }}" -F package=@$f https://nuget.pkg.github.com/${{ secrets.NUGET_USER }}/
         done
-    - name: Create zip archive
+    - name: Create zip archive (Jlw.Extensions.Identity.Stores)
       run: |
         zip -r "${{ env.PKGNAME }}.${{ env.PKGVERSION }}.zip" ./${{ env.PKGNAME }}/bin/Release/* README.md License.txt
-    - name: Create Release
+    - name: Create Release (Jlw.Extensions.Identity.Stores)
       id: create_release
       uses: actions/create-release@latest
       env:
@@ -114,7 +98,7 @@ jobs:
         release_name: Release ${{ env.PKGNAME }}
         draft: true
         prerelease: true
-    - name: Upload Release Asset
+    - name: Upload Release Asset (Jlw.Extensions.Identity.Stores)
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
@@ -131,16 +115,16 @@ jobs:
         echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
         export PKG_VERSION="$(echo `ls ./${{ env.PKGNAME }}/bin/Release/*.nupkg` | sed 's/[^0-9]*\([0-9.a-z\-]*\)\.nupkg/v\1/')"
         echo "::set-env name=PKGVERSION::$PKG_VERSION"
-    - name: Publish to github (using curl)
+    - name: Publish to github (using curl) (Jlw.Extensions.Identity.Mock)
       run: |
         for f in ./${{ env.PKGNAME }}/bin/Release/*.nupkg
         do
           curl -vX PUT -u "${{ secrets.NUGET_USER }}:${{ secrets.GITHUB_TOKEN }}" -F package=@$f https://nuget.pkg.github.com/${{ secrets.NUGET_USER }}/
         done
-    - name: Create zip archive
+    - name: Create zip archive (Jlw.Extensions.Identity.Mock)
       run: |
         zip -r "${{ env.PKGNAME }}.${{ env.PKGVERSION }}.zip" ./${{ env.PKGNAME }}/bin/Release/* README.md License.txt
-    - name: Create Release
+    - name: Create Release (Jlw.Extensions.Identity.Mock)
       id: create_release
       uses: actions/create-release@latest
       env:
@@ -150,7 +134,7 @@ jobs:
         release_name: Release ${{ env.PKGNAME }}
         draft: true
         prerelease: true
-    - name: Upload Release Asset
+    - name: Upload Release Asset (Jlw.Extensions.Identity.Mock)
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
