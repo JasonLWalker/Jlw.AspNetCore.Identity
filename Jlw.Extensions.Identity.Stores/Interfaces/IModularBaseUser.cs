@@ -40,6 +40,10 @@ namespace Jlw.Extensions.Identity.Stores
 
         DateTimeOffset? LockoutEnd { get; set; }
 
+        string SecurityStamp { get; set; }
+
+        string ConcurrencyStamp { get; set; }
+
         ICollection<TClaim> Claims { get; }
 
         IModularBaseUser<TKey, TClaim> CopyFrom(IModularBaseUser<TKey, TClaim> o);

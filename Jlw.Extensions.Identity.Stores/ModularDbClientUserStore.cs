@@ -47,7 +47,7 @@ namespace Jlw.Extensions.Identity.Stores
         {
             AddDefinition("FindByNameAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthFindUserByName", CommandType.StoredProcedure, new[] { "normalizedUserName" }, null, typeof(TUser)));
             AddDefinition("FindByEmailAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthFindUserByNormalizedEmail", CommandType.StoredProcedure, new[] { "normalizedEmail" }, null, typeof(TUser)));
-            AddDefinition("CreateAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthCreateUser", CommandType.StoredProcedure, new[] {"userName", "normalizedUserName", "email", "normalizedEmail", "emailConfirmed", "passwordHash", "phoneNumber", "phoneNumberConfirmed", "accessFailedCount", "lockoutEnabled", "lockoutEnd", "twoFactorEnabled"}, null, typeof(string)));
+            AddDefinition("CreateAsync", new RepositoryMethodDefinition<TUser, TUser>("sp_AuthCreateUser", CommandType.StoredProcedure, new[] {"userName", "normalizedUserName", "email", "normalizedEmail", "emailConfirmed", "passwordHash", "phoneNumber", "phoneNumberConfirmed", "accessFailedCount", "lockoutEnabled", "lockoutEnd", "twoFactorEnabled", "securityStamp", "concurrencyStamp"}, null, typeof(string)));
         }
 
         public static string GetCaller([CallerMemberName] string caller = null)
@@ -234,7 +234,9 @@ namespace Jlw.Extensions.Identity.Stores
                 else
                     _dbClient.AddParameterWithValue("@lockoutEnd", DBNull.Value, cmd);
                 _dbClient.AddParameterWithValue("@twoFactorEnabled", user.TwoFactorEnabled, cmd);
-                
+                _dbClient.AddParameterWithValue("@securityStamp", user.SecurityStamp, cmd);
+                _dbClient.AddParameterWithValue("@concurrencyStamp", user.ConcurrencyStamp, cmd);
+
                 conn.Open();
                 string result = cmd.ExecuteScalar().ToString();
                 switch (result.ToLower())
@@ -549,6 +551,16 @@ namespace Jlw.Extensions.Identity.Stores
         public override Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
             return Task.FromResult(GetRecordObject<TUser>(new TUser(){NormalizedEmail = normalizedEmail}, GetCaller()));
+        }
+
+        public override Task SetSecurityStampAsync(TUser user, string stamp, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return base.SetSecurityStampAsync(user, stamp, cancellationToken);
+        }
+
+        public override Task<string> GetSecurityStampAsync(TUser user, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return base.GetSecurityStampAsync(user, cancellationToken);
         }
     }
 }
