@@ -31,7 +31,11 @@ namespace TestMvcWebApp
             var dbClient = new ModularDbClient<SqlConnection>();
             services.AddSingleton<IModularDbClient>(dbClient);
 
-            services.AddTransient<IUserStore<UserLong>>(UserStoreFactory);
+            services.AddTransient<IUserStore<UserLong>>(provider =>
+            {
+                var repo = provider.GetRequiredService(typeof(IModularDbClient)) as IModularDbClient;
+                return new ModularDbClientUserStore<UserLong, long>(Configuration.GetConnectionString("DefaultConnection"), repo);
+            });
             services.AddTransient<IRoleStore<IModularBaseRole<long>>, ModularRoleStoreBase<long>>();
 
             services.ConfigureApplicationCookie(options =>
@@ -61,14 +65,6 @@ namespace TestMvcWebApp
             });
         }
         
-        
-        private ModularDbClientUserStore<UserLong,long> UserStoreFactory(IServiceProvider arg)
-        {
-            var repo = arg.GetService(typeof(IModularDbClient)) as IModularDbClient;
-            return new ModularDbClientUserStore<UserLong, long>(Configuration.GetConnectionString("DefaultConnection"), repo);
-        }
-        
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

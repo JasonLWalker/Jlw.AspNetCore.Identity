@@ -48,9 +48,10 @@ namespace Jlw.Extensions.Identity.Stores
 
         public override string SecurityStamp
         {
-            get => base.SecurityStamp ?? (base.SecurityStamp = Guid.NewGuid().ToString());
+            get => base.SecurityStamp ?? (SecurityStamp = Guid.NewGuid().ToString());
             set => base.SecurityStamp = value;
         }
+        
 
         /// <summary>
         /// The user's claims, for use in claims-based authentication.
@@ -87,6 +88,8 @@ namespace Jlw.Extensions.Identity.Stores
             LockoutEnabled = user.LockoutEnabled;
             LockoutEnd = user.LockoutEnd;
             TwoFactorEnabled = user.TwoFactorEnabled;
+            SecurityStamp = user.SecurityStamp;
+            ConcurrencyStamp = user.ConcurrencyStamp;
             
             return this;
         }
@@ -107,6 +110,8 @@ namespace Jlw.Extensions.Identity.Stores
             LockoutEnabled = DataUtility.Parse<bool>(o, nameof(LockoutEnabled));
             LockoutEnd = DataUtility.Parse<DateTimeOffset?>(o, nameof(LockoutEnd));
             TwoFactorEnabled = DataUtility.Parse<bool>(o, nameof(TwoFactorEnabled));
+            SecurityStamp = DataUtility.ParseString(o, nameof(SecurityStamp));
+            ConcurrencyStamp = DataUtility.ParseString(o, nameof(ConcurrencyStamp));
 
             return this;
         }
