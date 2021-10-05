@@ -96,7 +96,6 @@ namespace Jlw.Extensions.Identity.Stores
 
         public IModularBaseUser<TKey, TClaim> CopyFrom(object o)
         {
-            var t = typeof(TKey);
             Id = DataUtility.Parse<TKey>(o, nameof(Id));
             UserName = DataUtility.Parse<string>(o, nameof(UserName));
             NormalizedUserName = DataUtility.Parse<string>(o, nameof(NormalizedUserName));
