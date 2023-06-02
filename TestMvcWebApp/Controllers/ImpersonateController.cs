@@ -20,12 +20,12 @@ namespace TestMvcWebApp.Controllers
             _signInManager = signInManager;
         }
 
-        [Route("~/impersonate/{userId}")]
-        public async Task<IActionResult> ImpersonateUser(string userId)
+        [Route("~/impersonate/{username}")]
+        public async Task<IActionResult> ImpersonateUser(string username)
         {
             //var currentUserId = User.GetUserId();
 
-            var impersonatedUser = await _userManager.FindByIdAsync(userId);
+            var impersonatedUser = await _userManager.FindByNameAsync(username);
 
             if (impersonatedUser == null)
                 return Redirect("~/Identity/Account/Login");

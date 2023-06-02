@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Jlw.Utilities.Data;
 using Jlw.Utilities.Data.DbUtility;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
 namespace Jlw.Extensions.Identity.Stores
 {
@@ -550,6 +549,7 @@ namespace Jlw.Extensions.Identity.Stores
 
         public override Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return Task.FromResult(GetRecordObject<TUser>(new TUser(){NormalizedEmail = normalizedEmail}, GetCaller()));
         }
 
