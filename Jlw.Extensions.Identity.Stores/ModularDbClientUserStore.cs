@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Jlw.Utilities.Data;
 using Jlw.Utilities.Data.DbUtility;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
 namespace Jlw.Extensions.Identity.Stores
 {
