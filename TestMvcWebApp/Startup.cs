@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Jlw.Extensions.Identity.Mock;
-
+using Jlw.Extensions.ModularDbClient;
 using UserLong = Jlw.Extensions.Identity.Stores.ModularBaseUser<long>;
 
 namespace TestMvcWebApp
@@ -28,8 +28,9 @@ namespace TestMvcWebApp
         {
             services.AddTransient<IPasswordHasher<UserLong>, PlainTextPasswordHasher<UserLong>>();
 
-            var dbClient = new ModularDbClient<SqlConnection>();
-            services.AddSingleton<IModularDbClient>(dbClient);
+            var dbClient = new ModularDbClient<SqlConnection, SqlCommand, SqlParameter, SqlConnectionStringBuilder>();
+            //services.AddSingleton<IModularDbClient>(dbClient);
+            services.AddModularDbClient(Configuration.GetConnectionString("DefaultConnection"), dbClient);
 
             services.AddTransient<IUserStore<UserLong>>(provider =>
             {
