@@ -18,9 +18,8 @@
 |-----|-----|
 |Namespace|Jlw.Extensions.Identity.Stores|
 |Target Framework|netstandard2.0|
-|Author(s)||
-|Copyright||
-|Version|3.0.8553.19936|
+|Author(s)|Jason L. Walker|
+|Copyright|Copyright ©2012-2023 Jason L. Walker|
 
 
 ## Dependencies
@@ -42,9 +41,8 @@
 |-----|-----|
 |Namespace|Jlw.Extensions.Identity.Mock|
 |Target Framework|net6.0|
-|Author(s)||
-|Copyright||
-|Version|3.0.8553.19936|
+|Author(s)|Jason L. Walker|
+|Copyright|Copyright ©2012-2023 Jason L. Walker|
 
 
 ## Dependencies
