@@ -11,6 +11,7 @@ if (-Not ($packageName)){
 # Export GitHub Environment variables
 if ($env:GITHUB_ENV) {
 	"PKGNAME=$packageName" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+	"REPO_PKGNAME=Jlw.AspNetCore.Identity" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 	"REPO_PKGNAME_STORES=Jlw.Extensions.Identity.Stores" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 	"REPO_PKGNAME_MOCK=Jlw.Extensions.Identity.Mock" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 	"CURRENTDIR=$workingDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
