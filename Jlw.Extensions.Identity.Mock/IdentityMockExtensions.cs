@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Jlw.Extensions.Identity.Mock;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityMockExtensions
@@ -27,8 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, option =>
             {
-                //option.Cookie.Name = $".{config.SiteId}.Identity.{config.LoginType}"; // change cookie name
-                //option.Cookie.Path = (config.WebRootPath ?? "/").TrimEnd('/');
                 option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 option.SlidingExpiration = true;
             });
@@ -57,8 +56,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, option =>
             {
-                //option.Cookie.Name = $".{config.SiteId}.Identity.{config.LoginType}"; // change cookie name
-                //option.Cookie.Path = (config.WebRootPath ?? "/").TrimEnd('/');
                 option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 option.SlidingExpiration = true;
             });
