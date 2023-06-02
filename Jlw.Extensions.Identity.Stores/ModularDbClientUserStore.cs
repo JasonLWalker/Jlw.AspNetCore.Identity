@@ -550,6 +550,7 @@ namespace Jlw.Extensions.Identity.Stores
 
         public override Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return Task.FromResult(GetRecordObject<TUser>(new TUser(){NormalizedEmail = normalizedEmail}, GetCaller()));
         }
 
