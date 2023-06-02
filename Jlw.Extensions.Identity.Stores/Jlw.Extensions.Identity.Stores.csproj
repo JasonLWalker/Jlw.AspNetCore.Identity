@@ -24,8 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jlw.Utilities.Data" Version="4.7.8502.5651" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Jlw.Utilities.Data" Version="4.8.8531.6086" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.16" />
   </ItemGroup>
