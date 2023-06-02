@@ -2,46 +2,23 @@ name: Build and Test
 
 on:
   push:
-    branches: #all branches that are NOT main.
-      - '*'
-      - '!primary'
+    branches-ignore:    # Automatically run when pushing to all branches that are NOT main or staging. (These will be run when pull requests come in)
+      [ 'primary', 'staging' ]
+    paths-ignore:       # Do not automatically run if changes are only in the following directories
+      [ 'Help/**', 'docs/**', 'wiki/**', '.github/**', 'build-scripts/**', '**/README.md' ]
   pull_request:
-    branches: [ primary ]
-
+    branches:           # Run when pull requests are submitted to main or staging
+      [ primary, staging ]
+    paths-ignore:       # Do not automatically run if changes are only in the following directories
+      [ 'Help/**', 'docs/**', 'wiki/**', '.github/**', 'build-scripts/**', '**/README.md' ]
+  workflow_dispatch:    # Run on demand
 jobs:
   build-test:
-    runs-on: windows-latest
-    steps:
-    - name: Config Environment Variables
-      run: |
-        $CURRENT_DIR=(Get-Item -Path ".\").FullName
-        $PKG_NAME=(Get-Item -Path ".\").Name
-        "PKGNAME=$PKG_NAME" | Add-Content -Path $ENV:GITHUB_ENV
-        "CURRENTDIR=$CURRENT_DIR" | Add-Content -Path $ENV:GITHUB_ENV
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build with dotnet
-      run: dotnet build --version-suffix="-rc" --configuration Release --no-restore
-    - name: Test with dotnet 3.1
-      run: dotnet test --no-build --configuration Release --verbosity normal Jlw.Extensions.Identity.Stores.Tests
-
-    
-  cleanup:
-    needs: build-test
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-    - name: Config Environment Variables
-      run: |
-        export PKG_NAME="$(pwd | sed 's/.*\/\([^\/]*\)$/\1/')"
-        echo "PKGNAME=$PKG_NAME" >> $GITHUB_ENV
-    - name: Delete Artifacts
-      uses: geekyeggo/delete-artifact@v1
-      with:
-        name: ${{ env.PKGNAME }}  
-        failOnError: false
-
+    uses: ./.github/workflows/build-test-template.yml
+    with:
+        buildConfig: "Debug"
+        versionPrefix: ""
+        versionSuffix: ""
+    secrets:
+        NUGET_KEY: ${{ secrets.NUGET_KEY }}
 

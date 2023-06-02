@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Jlw.Extensions.Identity.Stores;
+using Jlw.Utilities.Data;
 
 namespace Jlw.Extensions.Identity.Mock
 {
@@ -35,9 +36,36 @@ namespace Jlw.Extensions.Identity.Mock
             return Task.FromResult(MockedUsers.FirstOrDefault(o =>  o?.Id?.ToString()?.Equals(id, StringComparison.InvariantCultureIgnoreCase) ?? default));
         }
 
+        public override Task<TUser> FindByEmailAsync(string id, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(MockedUsers.FirstOrDefault(o => o?.NormalizedEmail?.ToString()?.Equals(id, StringComparison.InvariantCultureIgnoreCase) ?? default));
+        }
+
+        public override Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
+        {
+            AddMockedUser(user, null);
+            return Task.FromResult(IdentityResult.Success);
+        }
+
         public static void AddMockedUser(TUser user, IEnumerable<IdentityUserClaim<TKey>> claims = null)
         {
-            TUser u = (TUser)user.CopyFrom(user);
+            long id = 1;
+            
+            if (MockedUsers.Count > 0)
+                id = MockedUsers.Max(o => DataUtility.ParseLong(o.Id)) + 1;
+            
+            TUser u = (TUser)user.CopyFrom(new
+            {
+                Id = id,
+                user.UserName,
+                user.NormalizedUserName,
+                user.Email,
+                user.NormalizedEmail,
+                user.EmailConfirmed,
+                user.PasswordHash,
+                user.PhoneNumber
+            });
+
             if (claims != null)
             {
                 foreach (var claim in claims)
