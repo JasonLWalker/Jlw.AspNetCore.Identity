@@ -1,43 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Deterministic>False</Deterministic>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);ReadPackageVersionFromOutputAssembly</GenerateNuspecDependsOn>
-    <RepositoryUrl>https://github.com/JasonLWalker/Jlw.AspNetCore.Identity.git</RepositoryUrl>
-    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <AssemblyName>Jlw.Extensions.Identity.Mock</AssemblyName>
-    <RootNamespace>Jlw.Extensions.Identity.Mock</RootNamespace>
-    <IsPackable>true</IsPackable>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup>
+		<Product>Jlw.AspNetCore.Identity</Product>
+		<PackageId>Jlw.Extensions.Identity.Mock</PackageId>
+		<RepositoryUrl>https://github.com/JasonLWalker/Jlw.AspNetCore.Identity.git</RepositoryUrl>
+		
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageLicenseUrl></PackageLicenseUrl>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<PackageReleaseNotes>Provided as is</PackageReleaseNotes>
 
-    <PackageId>Jlw.Extensions.Identity.Mock</PackageId>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Provided as is</PackageReleaseNotes>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
-  </PropertyGroup>
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+		<IsPackable>True</IsPackable>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>$(PackageId)</AssemblyName>
+		<RootNamespace>$(PackageId)</RootNamespace>
+		<Company>Jason L. Walker</Company>
+		<Authors>Jason L. Walker</Authors>
+		<Description></Description>
+		<Copyright>Copyright ©2012-2023 Jason L. Walker</Copyright>
+		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
+		<AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>true</SignAssembly>
+		<DelaySign>false</DelaySign>
+		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
-  </ItemGroup>
+	<PropertyGroup>
+		<DebugSymbols>true</DebugSymbols>
+		<EmbedAllSources>true</EmbedAllSources>
+		<DebugType>portable</DebugType>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
+	</ItemGroup>
 
-  <Target Name="ReadPackageVersionFromOutputAssembly" DependsOnTargets="Build">
-    <GetAssemblyIdentity AssemblyFiles="$(OutputPath)\$(AssemblyName).dll">
-      <Output TaskParameter="Assemblies" ItemName="PackAssembly" />
-    </GetAssemblyIdentity>
-    <PropertyGroup>
-      <PackageVersion>%(PackAssembly.Version)$(VersionSuffix)</PackageVersion>
-    </PropertyGroup>
-  </Target>
+	<ItemGroup>
+		<ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
+	</ItemGroup>
 
 </Project>
