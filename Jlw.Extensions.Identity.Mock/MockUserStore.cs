@@ -49,7 +49,11 @@ namespace Jlw.Extensions.Identity.Mock
 
         public static void AddMockedUser(TUser user, IEnumerable<IdentityUserClaim<TKey>> claims = null)
         {
-            var id = MockedUsers.Max(o => DataUtility.ParseLong(o.Id)) + 1;
+            long id = 1;
+            
+            if (MockedUsers.Count > 0)
+                id = MockedUsers.Max(o => DataUtility.ParseLong(o.Id)) + 1;
+            
             TUser u = (TUser)user.CopyFrom(new
             {
                 Id = id,
