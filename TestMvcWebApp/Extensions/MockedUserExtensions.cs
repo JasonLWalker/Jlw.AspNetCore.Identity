@@ -1,4 +1,4 @@
-﻿using Jlw.Extensions.Identity.Mock;
+﻿using Jlw.Extensions.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

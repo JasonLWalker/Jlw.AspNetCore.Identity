@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Jlw.Extensions.Identity.Mock
+namespace Jlw.Extensions.Identity
 {
     public class PlainTextPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : class 
     {
