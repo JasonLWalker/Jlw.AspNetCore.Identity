@@ -1,4 +1,6 @@
-using Jlw.Extensions.Identity.Stores;
+using Jlw.Extensions.Identity;
+using Jlw.Extensions.Identity.Mock;
+using Jlw.Extensions.ModularDbClient;
 using Jlw.Utilities.Data.DbUtility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,9 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using Jlw.Extensions.Identity.Mock;
-using Jlw.Extensions.ModularDbClient;
-using UserLong = Jlw.Extensions.Identity.Stores.ModularBaseUser<long>;
+using UserLong = Jlw.Extensions.Identity.ModularBaseUser<long>;
 
 namespace TestMvcWebApp
 {
@@ -45,7 +45,6 @@ namespace TestMvcWebApp
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
-
 
             services.AddDefaultIdentity<UserLong>(options =>
                 {

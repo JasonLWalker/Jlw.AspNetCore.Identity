@@ -1,4 +1,5 @@
-﻿namespace Jlw.Extensions.Identity.Stores
+﻿
+namespace Jlw.Extensions.Identity
 {
     public class ModularBaseRole : ModularBaseRole<int> { }
 

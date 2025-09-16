@@ -2,7 +2,7 @@
 using System.Threading;
 using Microsoft.AspNetCore.Identity;
 
-namespace Jlw.Extensions.Identity.Stores
+namespace Jlw.Extensions.Identity
 {
     public class ModularUserStoreBase :
         ModularUserStoreBase<ModularBaseUser>

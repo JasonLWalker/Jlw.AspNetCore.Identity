@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace Jlw.Extensions.Identity.Stores
+namespace Jlw.Extensions.Identity
 {
     public interface IModularBaseUser : IModularBaseUser<string>
     {

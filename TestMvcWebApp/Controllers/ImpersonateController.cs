@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ApplicationUser = Jlw.Extensions.Identity.Stores.ModularBaseUser<long>;
+using ApplicationUser = Jlw.Extensions.Identity.ModularBaseUser<long>;
 
 namespace TestMvcWebApp.Controllers
 {

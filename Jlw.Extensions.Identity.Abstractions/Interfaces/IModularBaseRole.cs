@@ -1,4 +1,4 @@
-﻿namespace Jlw.Extensions.Identity.Stores
+﻿namespace Jlw.Extensions.Identity
 {
     public interface IModularBaseRole : IModularBaseRole<int> { }
 
