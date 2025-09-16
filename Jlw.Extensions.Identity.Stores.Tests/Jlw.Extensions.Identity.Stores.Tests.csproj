@@ -18,6 +18,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
+    <ProjectReference Include="..\Jlw.Extensions.Identity.Mock\Jlw.Extensions.Identity.Mock.csproj" />
   </ItemGroup>
+
+	<Target Name="CustomSetVersionNumberForProj" AfterTargets="AfterBuild">
+		<Exec Command="powershell $(ProjectDir)..\build-scripts\generate-documentation.ps1 $(OutputPath)\ $(ProjectDir)..\docs" EchoOff="false" ConsoleToMSBuild="true"></Exec>
+	</Target>
+
 
 </Project>
