@@ -8,16 +8,21 @@ if (-Not ($packageName)){
 	$packageName=(Get-Item -Path ".\").Name
 }
 
-if (-Not ($versionPrefix)){
-	$versionPrefix="3.0.$([System.TimeSpan]::FromTicks($([System.DateTime]::UtcNow.Ticks)).Subtract($([System.TimeSpan]::FromTicks(630822816000000000))).TotalDays.ToString().SubString(0,9))"
-}
+#if (-Not ($versionPrefix)){
+#	$versionPrefix="4.0.$([System.TimeSpan]::FromTicks($([System.DateTime]::UtcNow.Ticks)).Subtract($([System.TimeSpan]::FromTicks(630822816000000000))).TotalDays.ToString().SubString(0,9))"
+#}
+# set version outputs $vPrefix and $vSuffix 
+& "$PSScriptRoot\set-version-property.ps1" -versionPrefix "$versionPrefix" -versionSuffix "$versionSuffix"
+
+# output versionPrefix to Azure
+Write-Host "##vso[task.setvariable variable=releaseVersion]$vPrefix$vSuffix"
 
 # Install dependencies
 #dotnet restore
 
 # Build/Pack with dotnet
 if (-Not ($versionSuffix)){
-dotnet build -p:VersionPrefix=$versionPrefix -p:Configuration=$buildType
+dotnet build -p:VersionPrefix=$global:versionPrefix -p:Configuration=$buildType
 } else {
-dotnet build -p:VersionPrefix=$versionPrefix -p:VersionSuffix=$versionSuffix -p:Configuration=$buildType
+dotnet build -p:VersionPrefix=$global:versionPrefix -p:VersionSuffix=$versionSuffix -p:Configuration=$buildType
 }

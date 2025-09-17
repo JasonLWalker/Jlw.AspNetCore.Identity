@@ -21,15 +21,15 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<AssemblyName>$(PackageId)</AssemblyName>
-		<RootNamespace>$(PackageId)</RootNamespace>
+		<RootNamespace>Jlw.Extensions.Identity</RootNamespace>
 		<Company>Jason L. Walker</Company>
 		<Authors>Jason L. Walker</Authors>
 		<Description></Description>
-		<Copyright>Copyright ©2012-2023 Jason L. Walker</Copyright>
-		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
+		<Copyright>Copyright ©2012-2025 Jason L. Walker</Copyright>
 		<AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
 		<DelaySign>false</DelaySign>
+		<VersionPrefix Condition="'$(VersionPrefix)' == ''">0.0.0.1</VersionPrefix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 	</PropertyGroup>
 
@@ -42,9 +42,28 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jlw.Utilities.Data" Version="4.8.8531.6086" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.16" />
+    <PackageReference Include="Jlw.Utilities.Data" Version="5.2.9362.8244" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
   </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Jlw.Extensions.Identity.Abstractions\Jlw.Extensions.Identity.Abstractions.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Interfaces\" />
+	  <Folder Include="Models\" />
+	</ItemGroup>
+
+	<Target Name="CustomSetVersionNumberForProj" Condition=" ('$(VersionPrefix)' == '0.0.0.1') Or ('$(Version)' == '0.0.0.1-alpha') Or ('$(Version)' == '0.0.0.1-rc') " BeforeTargets="BeforeBuild">
+		<Message Text="%0A========== Setting Version Number ==========" Importance="high" />
+		<Exec Command="powershell $(ProjectDir)..\build-scripts\set-version-property.ps1 -versionPrefix '' -versionSuffix '-alpha' " EchoOff="true" ConsoleToMSBuild="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="Version" />
+		</Exec>
+		<CreateProperty Value="$(Version)">
+			<Output TaskParameter="Value" PropertyName="Version" />
+		</CreateProperty>
+	</Target>
 
 </Project>

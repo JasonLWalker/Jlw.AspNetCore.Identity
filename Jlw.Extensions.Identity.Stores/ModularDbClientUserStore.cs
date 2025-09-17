@@ -13,7 +13,7 @@ using Jlw.Utilities.Data;
 using Jlw.Utilities.Data.DbUtility;
 using Microsoft.AspNetCore.Identity;
 
-namespace Jlw.Extensions.Identity.Stores
+namespace Jlw.Extensions.Identity
 {
     public class ModularDbClientUserStore<TUser, TKey> : ModularUserStoreBase<TUser, TKey>, IModularDataRepository<TUser, TUser>
         where TUser : ModularBaseUser<TKey>, new()
@@ -532,7 +532,7 @@ namespace Jlw.Extensions.Identity.Stores
                     while (rdr.Read())
                     {
                         Type t = user.Claims.GetType().GetTypeInfo().GenericTypeArguments[0];
-                        dynamic claim = Activator.CreateInstance(typeof(ModularBaseUserClaim<>).MakeGenericType(user.Id.GetType()), rdr);
+                        var claim = Activator.CreateInstance(typeof(ModularBaseUserClaim<>).MakeGenericType(user.Id.GetType()), rdr) as ModularBaseUserClaim<TKey>;
                         
                         user.Claims.Add(claim);
                     }

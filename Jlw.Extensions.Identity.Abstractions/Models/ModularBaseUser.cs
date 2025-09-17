@@ -4,7 +4,7 @@ using System.Data;
 using Jlw.Utilities.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace Jlw.Extensions.Identity.Stores
+namespace Jlw.Extensions.Identity
 {
 
     public class ModularBaseUser : ModularBaseUser<string>, IModularBaseUser

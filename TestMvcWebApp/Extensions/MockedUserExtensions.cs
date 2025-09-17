@@ -1,4 +1,4 @@
-﻿using Jlw.Extensions.Identity.Mock;
+﻿using Jlw.Extensions.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,7 +7,7 @@ namespace TestMvcWebApp
     public static class MockedUserExtensions
     {
 
-        public static IServiceCollection AddMockedUsers<TUser>(this IServiceCollection services) where TUser : Jlw.Extensions.Identity.Stores.ModularBaseUser, new()
+        public static IServiceCollection AddMockedUsers<TUser>(this IServiceCollection services) where TUser : Jlw.Extensions.Identity.ModularBaseUser, new()
         {
             int id = 1;
             string temp;

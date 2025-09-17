@@ -1,6 +1,7 @@
-﻿namespace Jlw.Extensions.Identity.Stores
+﻿
+namespace Jlw.Extensions.Identity
 {
-    public class ModularBaseRole : ModularBaseRole<int> { }
+    public class ModularBaseRole : ModularBaseRole<int>, IModularBaseRole { }
 
 
     public class ModularBaseRole<TKey> : IModularBaseRole<TKey>

@@ -1,9 +1,8 @@
 ﻿using System;
-using Jlw.Extensions.Identity.Stores;
+using Jlw.Extensions.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Jlw.Extensions.Identity.Mock;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection

@@ -1,23 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
 
-    <IsPackable>false</IsPackable>
+	  <IsPackable>false</IsPackable>
+	  <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0">
+	  <PackageReference Include="Jlw.Utilities.Testing" Version="4.0.9361.5743" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.10.4" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.10.4" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <ProjectReference Include="..\Jlw.Extensions.Identity.Stores\Jlw.Extensions.Identity.Stores.csproj" />
+    <ProjectReference Include="..\Jlw.Extensions.Identity.Mock\Jlw.Extensions.Identity.Mock.csproj" />
   </ItemGroup>
+
+	<Target Name="CustomSetVersionNumberForProj" AfterTargets="AfterBuild">
+		<Exec Command="powershell $(ProjectDir)..\build-scripts\generate-documentation.ps1 $(OutputPath)\ $(ProjectDir)..\docs" EchoOff="false" ConsoleToMSBuild="true"></Exec>
+	</Target>
+
 
 </Project>

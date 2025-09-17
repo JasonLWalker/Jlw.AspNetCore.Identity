@@ -1,5 +1,7 @@
-using Jlw.Extensions.Identity.Stores;
+using Jlw.Extensions.Identity;
+using Jlw.Extensions.ModularDbClient;
 using Jlw.Utilities.Data.DbUtility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,9 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using Jlw.Extensions.Identity.Mock;
-using Jlw.Extensions.ModularDbClient;
-using UserLong = Jlw.Extensions.Identity.Stores.ModularBaseUser<long>;
+using UserLong = Jlw.Extensions.Identity.ModularBaseUser<long>;
 
 namespace TestMvcWebApp
 {
@@ -39,13 +39,21 @@ namespace TestMvcWebApp
             });
             services.AddTransient<IRoleStore<IModularBaseRole<long>>, ModularRoleStoreBase<long>>();
 
+            var ticketStoreCache = new MemoryCacheTicketStore();
+            ticketStoreCache.SlidingExpirationDuration = TimeSpan.FromSeconds(600000);
+            
+            services.AddSingleton<ITicketStore, MemoryCacheTicketStore>(provider =>
+            {
+                return new MemoryCacheTicketStore();
+            });
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = $"/Identity/Account/Login";
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+                options.SessionStore = ticketStoreCache;
             });
-
 
             services.AddDefaultIdentity<UserLong>(options =>
                 {
@@ -54,7 +62,9 @@ namespace TestMvcWebApp
                 })
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
-
+            
+            
+            
             // using Microsoft.AspNetCore.Identity.UI.Services;
             //services.AddSingleton<IEmailSender, EmailSender>();
 
@@ -64,8 +74,16 @@ namespace TestMvcWebApp
             {
 
             });
+
+            services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, option =>
+            {
+                
+                //option.Cookie.Name = $".{config.SiteId}.Identity.{config.LoginType}"; // change cookie name
+                option.ExpireTimeSpan = ticketStoreCache.SlidingExpirationDuration; //TimeSpan.FromMinutes(20);
+                option.SlidingExpiration = true;
+            });
         }
-        
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

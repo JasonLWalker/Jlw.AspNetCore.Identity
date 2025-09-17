@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Jlw.Extensions.Identity.Stores;
 using Jlw.Utilities.Data;
 
-namespace Jlw.Extensions.Identity.Mock
+namespace Jlw.Extensions.Identity
 {
     public class MockUserStore<TUser> : MockUserStore<TUser, string> where TUser : ModularBaseUser, new()
     {

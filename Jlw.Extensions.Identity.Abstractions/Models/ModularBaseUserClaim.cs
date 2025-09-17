@@ -3,7 +3,7 @@ using System.Data;
 using Jlw.Utilities.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace Jlw.Extensions.Identity.Stores
+namespace Jlw.Extensions.Identity
 {
     /// <summary>
     ///     EntityType that represents one specific user claim
