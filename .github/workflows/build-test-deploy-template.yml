@@ -44,13 +44,13 @@ jobs:
           source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
+      #- uses: actions/cache@v3
+      #  with:
+      #    path: ~/.nuget/packages
+      #    # Look to see if there is a cache hit for the corresponding requirements file
+      #    key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-nuget
       - name: Set version number
         run: |
           ${{ env.BUILD_WORKSPACE_PATH }}/build-scripts/set-version-property.ps1 '${{ env.INPUT_BUILD_CONFIG }}' '${{ env.INPUT_VERSION_SUFFIX }}' '${{ env.INPUT_VERSION_PREFIX }}'
@@ -63,7 +63,7 @@ jobs:
         shell: pwsh
         run: dotnet test --no-build --no-restore --configuration '${{ env.INPUT_BUILD_CONFIG }}' --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
       - name: Upload dotnet test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dotnet-results-${{ matrix.dotnet-version }}
           path: TestResults-${{ matrix.dotnet-version }}
