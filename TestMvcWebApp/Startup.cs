@@ -44,7 +44,7 @@ namespace TestMvcWebApp
             
             services.AddSingleton<ITicketStore, MemoryCacheTicketStore>(provider =>
             {
-                return new MemoryCacheTicketStore();
+                return ticketStoreCache ?? new MemoryCacheTicketStore();
             });
 
             services.ConfigureApplicationCookie(options =>
