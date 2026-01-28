@@ -22,7 +22,7 @@ namespace Jlw.Extensions.Identity.Stores
         }
     }
     
-    public class ModularBaseUser<TKey> : Jlw.Extensions.Identity.ModularBaseUser<TKey, IdentityUserClaim<TKey>>, IModularBaseUser<TKey>
+    public class ModularBaseUser<TKey> : Jlw.Extensions.Identity.ModularBaseUser<TKey>, IModularBaseUser<TKey>
         where TKey : IEquatable<TKey>
     {
         public ModularBaseUser() : base()

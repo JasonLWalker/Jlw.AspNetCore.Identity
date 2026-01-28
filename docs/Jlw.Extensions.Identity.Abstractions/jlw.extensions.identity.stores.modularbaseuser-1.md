@@ -7,15 +7,15 @@
 Namespace: Jlw.Extensions.Identity.Stores
 
 ```csharp
-public class ModularBaseUser<TKey> : , , IModularBaseUser`1, IModularBaseUser`2
+public class ModularBaseUser<TKey> : , , , IModularBaseUser`1, IModularBaseUser`2
 ```
 
 #### Type Parameters
 
 `TKey`<br>
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → IdentityUser&lt;TKey&gt; → ModularBaseUser&lt;TKey, IdentityUserClaim&lt;TKey&gt;&gt; → [ModularBaseUser&lt;TKey&gt;](./jlw.extensions.identity.stores.modularbaseuser-1.md)<br>
-Implements IModularBaseUser&lt;TKey, IdentityUserClaim&lt;TKey&gt;&gt;, IModularBaseUser&lt;TKey&gt;, IModularBaseUser&lt;TKey, IdentityUserClaim&lt;TKey&gt;&gt;
+Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → IdentityUser&lt;TKey&gt; → ModularBaseUser&lt;TKey, IdentityUserClaim&lt;TKey&gt;&gt; → ModularBaseUser&lt;TKey&gt; → [ModularBaseUser&lt;TKey&gt;](./jlw.extensions.identity.stores.modularbaseuser-1.md)<br>
+Implements IModularBaseUser&lt;TKey, IdentityUserClaim&lt;TKey&gt;&gt;, IModularBaseUser&lt;TKey&gt;, IModularBaseUser&lt;TKey&gt;, IModularBaseUser&lt;TKey, IdentityUserClaim&lt;TKey&gt;&gt;
 
 ## Properties
 

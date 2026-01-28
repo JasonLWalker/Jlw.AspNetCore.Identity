@@ -33,10 +33,8 @@ public string SecurityStamp { get; set; }
 
 ### **Claims**
 
-The user's claims, for use in claims-based authentication.
-
 ```csharp
-public ICollection<TClaim> Claims { get; private set; }
+public ICollection<TClaim> Claims { get; }
 ```
 
 #### Property Value
