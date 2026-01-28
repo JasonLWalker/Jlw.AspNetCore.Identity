@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Identity;
 namespace Jlw.Extensions.Identity.Stores
 {
 
+    /// <summary>
+    /// Shim to support legacy code should use Interface from Jlw.Extensions.Identity
+    /// </summary>
     public class ModularBaseUser : Jlw.Extensions.Identity.ModularBaseUser<string>, IModularBaseUser
     {
         public ModularBaseUser() : base()
@@ -21,7 +24,10 @@ namespace Jlw.Extensions.Identity.Stores
         {
         }
     }
-    
+
+    /// <summary>
+    /// Shim to support legacy code should use Interface from Jlw.Extensions.Identity
+    /// </summary>
     public class ModularBaseUser<TKey> : Jlw.Extensions.Identity.ModularBaseUser<TKey>, IModularBaseUser<TKey>
         where TKey : IEquatable<TKey>
     {
@@ -44,8 +50,11 @@ namespace Jlw.Extensions.Identity.Stores
         {
         }
     }
-        
 
+
+    /// <summary>
+    /// Shim to support legacy code should use Interface from Jlw.Extensions.Identity
+    /// </summary>
     public class ModularBaseUser<TKey, TClaim> : Jlw.Extensions.Identity.ModularBaseUser<TKey, TClaim>, IModularBaseUser<TKey, TClaim>
         where TKey : IEquatable<TKey>
         where TClaim : IdentityUserClaim<TKey>
